@@ -1,7 +1,9 @@
 import bcrypt from "bcrypt";
 import httpStatus from "http-status";
 import { User } from "../models/user.model.js";
-const login = async () => {
+import crypto from "crypto";
+
+const login = async (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) {
         return res.status(httpStatus.BAD_REQUEST).json({ message: "Username and password are required" });
@@ -11,11 +13,13 @@ const login = async () => {
         if (!user) {
             return res.status(httpStatus.NOT_FOUND).json({ message: "User not found" });
         }
-        if (bcrypt.compare(password, user.password)) {
+        if (await bcrypt.compare(password, user.password)) {
             let token = crypto.randomBytes(20).toString("hex");
             user.token = token;
             await user.save();
             return res.status(httpStatus.OK).json({ token: token });
+        } else {
+            return res.status(httpStatus.UNAUTHORIZED).json({ message: "Invalid Password" });
         }
     } catch (err) {
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: "Internal server error" });

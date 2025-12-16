@@ -14,7 +14,7 @@ app.set("port", process.env.PORT || 3000);
 app.use(cors());
 app.use(express.json({ limit: "70kb" }));
 app.use(express.urlencoded({ extended: true, limit: "70kb" }));
-app.use("/api/users", usersRouter);
+app.use("/api/v1/users", usersRouter);
 
 
 const start = async () => {
