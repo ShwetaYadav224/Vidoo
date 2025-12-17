@@ -41,4 +41,4 @@ const register = async (req, res) => {
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: "Internal server error" });
     }
 }
-export { login, register }
+export { login, register }  
